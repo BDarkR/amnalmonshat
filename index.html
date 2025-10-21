@@ -8,6 +8,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+  <!-- فيديو الخلفية -->
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="video.mp4" type="video/mp4" />
+    متصفحك لا يدعم تشغيل الفيديو.
+  </video>
+
   <!-- خلفية الشعار -->
   <div class="bg-logo" aria-hidden="true"></div>
 
@@ -48,10 +55,8 @@
           <option>ضابط خفر</option>
         </select>
 
-        <!-- حقل الرقم -->
         <input id="titleNumberInput" type="text" placeholder="أضف رقم السرية (مثال: 1)" class="input small" />
 
-        <!-- اختر السرية -->
         <select id="sariaSelect" class="input">
           <option value="">اختر السرية</option>
           <option value="1">سرية 1</option>
@@ -68,8 +73,6 @@
 
         <div class="actions">
           <button type="button" id="showName" class="btn primary">اضغط هنا لاظهار اسمك ✒️</button>
-
-          <!-- مخفي افتراضياً حتى الضغطة -->
           <input id="result" readonly class="result hidden" placeholder="النتيجة تظهر هنا" />
           <button type="button" id="copyBtn" class="btn secondary hidden">اضغط هنا للنسخ 🔗</button>
         </div>
@@ -78,7 +81,6 @@
   </main>
 
   <script>
-    // (يبقى الجافاسكربت كما هو)
     const codeInput = document.getElementById('codeInput');
     const titleSelect = document.getElementById('titleSelect');
     const titleNumberInput = document.getElementById('titleNumberInput');

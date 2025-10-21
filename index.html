@@ -4,8 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>تغير المسمى الميداني قوات امن المنشات</title>
-  <link href="style.css" rel="stylesheet" />
-  <!-- Optional: Arabic webfont -->
+  <link href="./style.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -48,7 +47,7 @@
           <option>ضابط خفر</option>
         </select>
 
-        <!-- الحجم الآن مساوٍ لباقي الحقول -->
+        <!-- حقل الرقم -->
         <input id="titleNumberInput" type="text" placeholder="أضف رقم السرية (مثال: 1)" class="input small" />
 
         <!-- اختر السرية -->
@@ -68,15 +67,17 @@
 
         <div class="actions">
           <button type="button" id="showName" class="btn primary">اضغط هنا لاظهار اسمك ✒️</button>
-          <input id="result" readonly class="result" placeholder="النتيجة تظهر هنا" />
-          <button type="button" id="copyBtn" class="btn secondary">اضغط هنا للنسخ 🔗</button>
+
+          <!-- مخفي افتراضياً حتى الضغطة -->
+          <input id="result" readonly class="result hidden" placeholder="النتيجة تظهر هنا" />
+          <button type="button" id="copyBtn" class="btn secondary hidden">اضغط هنا للنسخ 🔗</button>
         </div>
       </form>
     </section>
   </main>
 
   <script>
-    // يجمع الحقول ويكوّن النتيجة بالشكل المطلوب
+    // عناصر DOM
     const codeInput = document.getElementById('codeInput');
     const titleSelect = document.getElementById('titleSelect');
     const titleNumberInput = document.getElementById('titleNumberInput');
@@ -90,13 +91,13 @@
     const copyBtn = document.getElementById('copyBtn');
     const result = document.getElementById('result');
 
-    function updateResult() {
+    // لا نحدّث النتيجة تلقائياً — فقط عند الضغطة
+    function buildOutputString() {
       const code = (codeInput.value || codeInput.placeholder).trim();
       let title = titleSelect.options[titleSelect.selectedIndex]?.text || '';
       const titleNum = titleNumberInput.value.trim();
-      const sariaVal = sariaSelect.value; // '1','2','3','4' or ''
+      const sariaVal = sariaSelect.value; // '1'..'4' or ''
 
-      // إلحاق رقم السرية أو رقم المسمى بالمسمى الرئيسي إذا وُجد
       if (title && titleNum) {
         title = `${title} ${titleNum}`;
       }
@@ -108,7 +109,6 @@
       let output = parts.join(' | ');
 
       if (sariaVal) {
-        // أولوية اللواحق: قائد (ق) > مساعد (م) > شرطة (ش) > افتراضي (س)
         let sariaSuffix;
         if (leaderChk.checked) {
           sariaSuffix = `( ق . س ${sariaVal} )`;
@@ -128,31 +128,33 @@
         }
       }
 
-      result.value = output || 'لم تدخل بيانات بعد';
+      return output || '';
     }
 
-    // تحديث فوري عند تغيّر أي حقل
-    [codeInput, titleSelect, titleNumberInput, sariaSelect, leaderChk, assistantChk, militaryChk].forEach(el => {
-      el.addEventListener('input', updateResult);
-      el.addEventListener('change', updateResult);
+    // عند الضغط: نولد النتيجة ثم نعرض حقل النتيجة وزر النسخ
+    showBtn.addEventListener('click', () => {
+      const output = buildOutputString();
+      if (!output) {
+        // إذا ما فيه شيء ليعرض نتركه مخفي وننبّه المستخدم
+        alert('لم تدخل بيانات لعرضها.');
+        return;
+      }
+      result.value = output;
+      result.classList.remove('hidden');
+      copyBtn.classList.remove('hidden');
     });
 
-    showBtn.addEventListener('click', updateResult);
-
+    // النسخ يعمل فقط على ما هو ظاهر في حقل النتيجة
     copyBtn.addEventListener('click', async () => {
-      if (!result.value || result.value === 'لم تدخل بيانات بعد') return alert('لا يوجد شيء لنسخه');
+      if (!result.value) return alert('لا يوجد شيء لنسخه');
       try {
         await navigator.clipboard.writeText(result.value);
         copyBtn.textContent = 'تم النسخ ✓';
         setTimeout(() => copyBtn.textContent = 'اضغط هنا للنسخ 🔗', 1500);
       } catch (e) {
-        alert('فشل النسخ — افتح المتصفح أو جرّب النسخ يدوياً');
+        alert('فشل النسخ — جرّب يدوياً');
       }
     });
-
-    // تهيئة أولية
-    updateResult();
   </script>
 </body>
 </html>
-

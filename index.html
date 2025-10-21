@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>توجيهات الميدان — مثال</title>
+  <link href="styles.css" rel="stylesheet" />
+  <!-- Optional: Arabic webfont -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="bg-mark"></div>
+
+  <header class="top-nav">
+    <nav>
+      <button class="pill">توجيهات الميدان</button>
+      <button class="pill">توجيهات التوظيف</button>
+      <button class="pill">تقارير العمليات</button>
+    </nav>
+  </header>
+
+  <main class="center-wrap">
+    <section class="card">
+      <h1 class="title">⚙️ توجيهات الميدان ⚙️</h1>
+      <p class="subtitle">اختصر اسمك الميداني</p>
+
+      <form id="fieldForm">
+        <input type="text" placeholder="ادخل اسمك مثال (حمد بن عسكر)" class="input" />
+        <input type="text" placeholder="كودك الميداني مثال (H-018)" class="input" />
+        <select class="input">
+          <option>اختر ربعتك</option>
+          <option>الربعة الأولى</option>
+          <option>الربعة الثانية</option>
+        </select>
+
+        <div class="checkbox-group">
+          <label><input type="checkbox" name="services" /> هل تريد إضافة خدمة الأسطول؟</label>
+          <label><input type="checkbox" name="services" /> فتح ميكانيك</label>
+          <label><input type="checkbox" name="services" /> مسارات التنقل و التزويد</label>
+          <label><input type="checkbox" name="services" /> وحدة تحكم</label>
+          <label><input type="checkbox" name="services" /> كود المعهد</label>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="showName" class="btn primary">اضغط هنا لاظهار اسمك ✒️</button>
+          <input id="result" readonly class="result" placeholder="النتيجة تظهر هنا" />
+          <button type="button" id="copyBtn" class="btn secondary">اضغط هنا للنسخ 🔗</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // Einfaches Beispiel-JS: erzeugt eine zusammengesetzte Ergebniss-Zeile und kopiert sie
+    const form = document.getElementById('fieldForm');
+    const showBtn = document.getElementById('showName');
+    const copyBtn = document.getElementById('copyBtn');
+    const result = document.getElementById('result');
+
+    showBtn.addEventListener('click', () => {
+      const inputs = Array.from(form.querySelectorAll('.input'));
+      const values = inputs.map(i => i.value.trim()).filter(Boolean);
+      const output = values.join(' | ') || 'لم تدخل بيانات بعد';
+      result.value = output;
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!result.value) return alert('لا يوجد شيء لنسخه');
+      try {
+        await navigator.clipboard.writeText(result.value);
+        copyBtn.textContent = 'تم النسخ ✓';
+        setTimeout(() => copyBtn.textContent = 'اضغط هنا للنسخ 🔗', 1500);
+      } catch (e) {
+        alert('فشل النسخ — افتح المتصفح أو جرّب يدوياً');
+      }
+    });
+  </script>
+</body>
+</html>

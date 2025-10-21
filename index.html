@@ -11,7 +11,8 @@
   <header class="site-header">
     <div class="logo-wrap">
       <div class="logo-card">
-        <img src="./logo.png" alt="شعار قوات أمن المنشآت" class="logo-img" />
+        <!-- تم تحديث اسم الملف هنا -->
+        <img src="./Your_paragraph_text.webp" alt="شعار قوات أمن المنشآت" class="logo-img" />
       </div>
 
       <div class="ribbon">
@@ -85,7 +86,7 @@
   </main>
 
   <script>
-    // عناصر DOM
+    // (يبقى الجافاسكربت كما هو)
     const codeInput = document.getElementById('codeInput');
     const titleSelect = document.getElementById('titleSelect');
     const titleNumberInput = document.getElementById('titleNumberInput');
@@ -99,12 +100,11 @@
     const copyBtn = document.getElementById('copyBtn');
     const result = document.getElementById('result');
 
-    // لا نحدّث النتيجة تلقائياً — فقط عند الضغطة
     function buildOutputString() {
       const code = (codeInput.value || codeInput.placeholder).trim();
       let title = titleSelect.options[titleSelect.selectedIndex]?.text || '';
       const titleNum = titleNumberInput.value.trim();
-      const sariaVal = sariaSelect.value; // '1'..'4' or ''
+      const sariaVal = sariaSelect.value;
 
       if (title && titleNum) {
         title = `${title} ${titleNum}`;
@@ -129,7 +129,6 @@
         }
         output = output ? `${output} | ${sariaSuffix}` : sariaSuffix;
       } else {
-        // حالة: اخترت شرطة عسكرية دون اختيار سرية -> نعرض "( ش )"
         if (militaryChk.checked) {
           const sariaSuffix = `( ش )`;
           output = output ? `${output} | ${sariaSuffix}` : sariaSuffix;
@@ -139,7 +138,6 @@
       return output || '';
     }
 
-    // عند الضغط: نولد النتيجة ثم نعرض حقل النتيجة وزر النسخ
     showBtn.addEventListener('click', () => {
       const output = buildOutputString();
       if (!output) {
@@ -151,7 +149,6 @@
       copyBtn.classList.remove('hidden');
     });
 
-    // النسخ يعمل فقط على ما هو ظاهر في حقل النتيجة
     copyBtn.addEventListener('click', async () => {
       if (!result.value) return alert('لا يوجد شيء لنسخه');
       try {
@@ -163,7 +160,6 @@
       }
     });
 
-    // فتح الصورة بحجم كامل عند النقر (اختياري)
     document.querySelectorAll('.logo-img').forEach(img => {
       img.addEventListener('click', () => {
         const w = window.open('');

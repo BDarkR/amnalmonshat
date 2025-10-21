@@ -19,41 +19,51 @@
 
   <main class="center-wrap">
     <section class="card">
-      <h1 class="title"> توجيهات الميدان </h1>
-      <p class="subtitle"> المسمى الميداني </p>
+      <h1 class="title">توجيهات الميدان</h1>
+      <p class="subtitle">المسمى الميداني</p>
 
-      <form id="fieldForm">
-        <input type="text" placeholder="كودك الميداني مثال (H-018)" class="input" />
-        <select class="input">
+      <form id="fieldForm" onsubmit="return false;">
+        <input id="codeInput" type="text" placeholder="كودك الميداني مثال (H-018)" class="input" />
+
+        <select id="titleSelect" class="input">
+          <option value="">اختر المسمى</option>
           <option>قائد امن المنشات</option>
           <option>نائب قائد امن المنشات</option>
           <option>مساعد قائد امن المنشات</option>
           <option>نائب مساعد قائد</option>
-          <option>درع</option>
+          <option>ردع</option>
           <option>برق</option>
           <option>صقر</option>
           <option>سهم</option>
           <option>مركز العمليات</option>
-          <option> نائب العمليات</option>
-          <option> حره </option>
-          <option> أمن 1 </option>
-          <option> أمن 2 </option>
-          <option> مشرف أمن 1</option>
-          <option> مشرف أمن 2</option>
-          <option>مساندة أمن 1 </option>
-          <option>مساندة أمن 2 </option>
+          <option>نائب العمليات</option>
+          <option>حره</option>
+          <option>أمن</option>
+          <option>مشرف أمن</option>
+          <option>مساندة أمن</option>
           <option>ساهر</option>
           <option>عين</option>
-          <option>سجن 1</option>
-          <option>سجن 1</option>
+          <option>سجن</option>
           <option>ساحل</option>
           <option>ضابط خفر</option>
         </select>
 
+        <!-- الحجم الآن مساوٍ لباقي الحقول -->
+        <input id="titleNumberInput" type="text" placeholder="أضف رقم السرية (مثال: 1)" class="input small" />
+
+        <!-- اختر السرية -->
+        <select id="sariaSelect" class="input">
+          <option value="">اختر السرية</option>
+          <option value="1">سرية 1</option>
+          <option value="2">سرية 2</option>
+          <option value="3">سرية 3</option>
+          <option value="4">سرية 4</option>
+        </select>
+
         <div class="checkbox-group">
-          <label><input type="checkbox" name="services" /> قائد سرية</label>
-          <label><input type="checkbox" name="services" /> مساعد قائد السرية</label>
-          <label><input type="checkbox" name="services" /> شرطة عسكرية</label>
+          <label><input id="leaderChk" type="checkbox" name="services" /> قائد سرية</label>
+          <label><input id="assistantChk" type="checkbox" name="services" /> مساعد قائد السرية</label>
+          <label><input id="militaryChk" type="checkbox" name="services" /> شرطة عسكرية</label>
         </div>
 
         <div class="actions">
@@ -66,31 +76,82 @@
   </main>
 
   <script>
-    // Einfaches Beispiel-JS: erzeugt eine zusammengesetzte Ergebniss-Zeile und kopiert sie
-    const form = document.getElementById('fieldForm');
+    // يجمع الحقول ويكوّن النتيجة بالشكل المطلوب
+    const codeInput = document.getElementById('codeInput');
+    const titleSelect = document.getElementById('titleSelect');
+    const titleNumberInput = document.getElementById('titleNumberInput');
+    const sariaSelect = document.getElementById('sariaSelect');
+
+    const leaderChk = document.getElementById('leaderChk');
+    const assistantChk = document.getElementById('assistantChk');
+    const militaryChk = document.getElementById('militaryChk');
+
     const showBtn = document.getElementById('showName');
     const copyBtn = document.getElementById('copyBtn');
     const result = document.getElementById('result');
 
-    showBtn.addEventListener('click', () => {
-      const inputs = Array.from(form.querySelectorAll('.input'));
-      const values = inputs.map(i => i.value.trim()).filter(Boolean);
-      const output = values.join(' | ') || 'لم تدخل بيانات بعد';
-      result.value = output;
+    function updateResult() {
+      const code = (codeInput.value || codeInput.placeholder).trim();
+      let title = titleSelect.options[titleSelect.selectedIndex]?.text || '';
+      const titleNum = titleNumberInput.value.trim();
+      const sariaVal = sariaSelect.value; // '1','2','3','4' or ''
+
+      // إلحاق رقم السرية أو رقم المسمى بالمسمى الرئيسي إذا وُجد
+      if (title && titleNum) {
+        title = `${title} ${titleNum}`;
+      }
+
+      const parts = [];
+      if (code) parts.push(code);
+      if (title) parts.push(title);
+
+      let output = parts.join(' | ');
+
+      if (sariaVal) {
+        // أولوية اللواحق: قائد (ق) > مساعد (م) > شرطة (ش) > افتراضي (س)
+        let sariaSuffix;
+        if (leaderChk.checked) {
+          sariaSuffix = `( ق . س ${sariaVal} )`;
+        } else if (assistantChk.checked) {
+          sariaSuffix = `( م . س ${sariaVal} )`;
+        } else if (militaryChk.checked) {
+          sariaSuffix = `( ش . س ${sariaVal} )`;
+        } else {
+          sariaSuffix = `( س ${sariaVal} )`;
+        }
+        output = output ? `${output} | ${sariaSuffix}` : sariaSuffix;
+      } else {
+        // حالة: اخترت شرطة عسكرية دون اختيار سرية -> نعرض "( ش )"
+        if (militaryChk.checked) {
+          const sariaSuffix = `( ش )`;
+          output = output ? `${output} | ${sariaSuffix}` : sariaSuffix;
+        }
+      }
+
+      result.value = output || 'لم تدخل بيانات بعد';
+    }
+
+    // تحديث فوري عند تغيّر أي حقل
+    [codeInput, titleSelect, titleNumberInput, sariaSelect, leaderChk, assistantChk, militaryChk].forEach(el => {
+      el.addEventListener('input', updateResult);
+      el.addEventListener('change', updateResult);
     });
 
+    showBtn.addEventListener('click', updateResult);
+
     copyBtn.addEventListener('click', async () => {
-      if (!result.value) return alert('لا يوجد شيء لنسخه');
+      if (!result.value || result.value === 'لم تدخل بيانات بعد') return alert('لا يوجد شيء لنسخه');
       try {
         await navigator.clipboard.writeText(result.value);
         copyBtn.textContent = 'تم النسخ ✓';
         setTimeout(() => copyBtn.textContent = 'اضغط هنا للنسخ 🔗', 1500);
       } catch (e) {
-        alert('فشل النسخ — افتح المتصفح أو جرّب يدوياً');
+        alert('فشل النسخ — افتح المتصفح أو جرّب النسخ يدوياً');
       }
     });
+
+    // تهيئة أولية
+    updateResult();
   </script>
 </body>
-
 </html>
-

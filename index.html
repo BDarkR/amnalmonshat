@@ -8,18 +8,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- خلفية الشعار -->
+  <div class="bg-logo" aria-hidden="true"></div>
+
   <header class="site-header">
-    <div class="logo-wrap">
-      <div class="logo-card">
-        <!-- تم تحديث اسم الملف هنا -->
-        <img src="./Your_paragraph_text.webp" alt="شعار قوات أمن المنشآت" class="logo-img" />
-      </div>
-
-      <div class="ribbon">
-        <span class="ribbon-text">قوات أمن المنشآت</span>
-      </div>
-    </div>
-
     <nav class="top-nav">
       <button class="pill">توجيهات الميدان</button>
     </nav>
@@ -158,14 +150,6 @@
       } catch (e) {
         alert('فشل النسخ — جرّب يدوياً');
       }
-    });
-
-    document.querySelectorAll('.logo-img').forEach(img => {
-      img.addEventListener('click', () => {
-        const w = window.open('');
-        w.document.write('<title>شعار</title>');
-        w.document.write('<img src="' + img.src + '" style="max-width:100%;height:auto;display:block;margin:0 auto;background:#000">');
-      });
     });
   </script>
 </body>

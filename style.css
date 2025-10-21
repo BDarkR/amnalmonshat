@@ -16,24 +16,79 @@ body{
   -moz-osx-font-smoothing:grayscale;
 }
 
-.bg-mark{
-  position:fixed;
-  right:0;
-  bottom:0;
-  width:60vmin;
-  height:60vmin;
-  background:radial-gradient(circle at center, rgba(255,255,255,0.02), transparent 30%);
-  pointer-events:none;
-  filter:blur(2px);
-  opacity:0.8;
+/* ---------- شعار ومكانه ---------- */
+.site-header{
+  padding-top:28px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
 }
 
-.top-nav{padding:28px 24px; display:flex; justify-content:center}
+/* غلاف الشعار */
+.logo-wrap{position:relative;display:inline-block}
+
+/* البطاقة الدائرية للشعار */
+.logo-card{
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  padding:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 12px 30px rgba(0,0,0,0.6), 0 2px 6px rgba(0,0,0,0.4);
+  border: 3px solid rgba(255,255,255,0.03);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition: transform .25s ease, box-shadow .25s ease;
+  margin:0 auto;
+}
+
+/* تأثير تكبير بسيط عند المرور */
+.logo-card:hover{transform: translateY(-6px) scale(1.02); box-shadow: 0 20px 60px rgba(0,0,0,0.7)}
+
+/* الصورة داخل الدائرة */
+.logo-img{
+  width:86%;
+  height:86%;
+  object-fit:contain;
+  display:block;
+  cursor:pointer;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.6));
+  border-radius:50%;
+  background: rgba(255,255,255,0.01);
+}
+
+/* الشريط السفلي (ريتبون) */
+.ribbon{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:-16px;
+  background: linear-gradient(180deg, rgba(39,174,96,1), rgba(29,141,77,1));
+  color:#071108;
+  padding:8px 18px;
+  border-radius:8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+  font-weight:700;
+  letter-spacing:0.6px;
+  border:2px solid rgba(0,0,0,0.12);
+}
+
+/* نص الشريط */
+.ribbon-text{display:inline-block;padding:2px 6px; font-size:16px}
+
+/* ملاحظة أو وصف تحت الشعار */
+.note{margin-top:6px;color:var(--muted);font-size:13px}
+
+/* ---------- بقية الأنماط للموقع (موجودة سابقاً) ---------- */
+
+.top-nav{display:flex; gap:12px; align-items:center; justify-content:center}
 .top-nav .pill{
   background:var(--accent);
   color:#111;
   border-radius:12px;
-  padding:10px 18px;
+  padding:8px 14px;
   margin:0 8px;
   border:none;
   font-weight:600;
@@ -41,7 +96,7 @@ body{
 }
 
 .center-wrap{
-  min-height:calc(100vh - 100px);
+  min-height:calc(100vh - 260px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -144,7 +199,7 @@ body{
 .btn.secondary{
   background:transparent;
   color:var(--accent);
-  border:1px dashed rgba(39,174,96,0.5); /* مطابق للون الأخضر */
+  border:1px dashed rgba(39,174,96,0.5);
   width:60%;
 }
 
@@ -158,10 +213,16 @@ body{
   border:1px solid rgba(255,255,255,0.02);
 }
 
+/* أداة لإخفاء العناصر */
+.hidden{display:none !important}
+
 /* استجابة */
-@media (max-width:480px){
+@media (max-width:520px){
+  .logo-card{width:140px;height:140px;padding:10px}
+  .ribbon{padding:6px 12px;bottom:-12px}
+  .ribbon-text{font-size:13px}
+  .center-wrap{min-height:calc(100vh - 220px)}
   .card{width:92%}
-  .top-nav{padding:14px}
   .title{font-size:20px}
   .input.small{max-width:100%}
 }

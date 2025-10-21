@@ -144,7 +144,7 @@ body{
 .btn.secondary{
   background:transparent;
   color:var(--accent);
-  border:1px dashed rgba(39,174,96,0.5);
+  border:1px dashed rgba(39,174,96,0.5); /* مطابق للون الأخضر */
   width:60%;
 }
 
@@ -157,9 +157,6 @@ body{
   color:#ddd;
   border:1px solid rgba(255,255,255,0.02);
 }
-
-/* أداة لإخفاء العناصر */
-.hidden{display:none !important}
 
 /* استجابة */
 @media (max-width:480px){

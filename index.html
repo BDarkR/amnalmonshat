@@ -8,10 +8,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="bg-mark"></div>
+  <header class="site-header">
+    <div class="logo-wrap">
+      <div class="logo-card">
+        <img src="./logo.png" alt="شعار قوات أمن المنشآت" class="logo-img" />
+      </div>
 
-  <header class="top-nav">
-    <nav>
+      <div class="ribbon">
+        <span class="ribbon-text">قوات أمن المنشآت</span>
+      </div>
+    </div>
+
+    <nav class="top-nav">
       <button class="pill">توجيهات الميدان</button>
     </nav>
   </header>
@@ -48,7 +56,7 @@
         </select>
 
         <!-- حقل الرقم -->
-        <input id="titleNumberInput" type="text" placeholder="أضف رقم توجيهك (مثال: 1)" class="input small" />
+        <input id="titleNumberInput" type="text" placeholder="أضف رقم السرية (مثال: 1)" class="input small" />
 
         <!-- اختر السرية -->
         <select id="sariaSelect" class="input">
@@ -135,7 +143,6 @@
     showBtn.addEventListener('click', () => {
       const output = buildOutputString();
       if (!output) {
-        // إذا ما فيه شيء ليعرض نتركه مخفي وننبّه المستخدم
         alert('لم تدخل بيانات لعرضها.');
         return;
       }
@@ -155,7 +162,15 @@
         alert('فشل النسخ — جرّب يدوياً');
       }
     });
+
+    // فتح الصورة بحجم كامل عند النقر (اختياري)
+    document.querySelectorAll('.logo-img').forEach(img => {
+      img.addEventListener('click', () => {
+        const w = window.open('');
+        w.document.write('<title>شعار</title>');
+        w.document.write('<img src="' + img.src + '" style="max-width:100%;height:auto;display:block;margin:0 auto;background:#000">');
+      });
+    });
   </script>
 </body>
 </html>
-

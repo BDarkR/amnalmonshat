@@ -22,6 +22,15 @@
       <p class="subtitle">المسمى الميداني</p>
 
       <form id="fieldForm" onsubmit="return false;">
+        <!-- حقل لاعب معتمد -->
+        <select id="playerSelect" class="input">
+          <option value="">لاعب معتمد (اختياري)</option>
+          <option value="CD">CD</option>
+          <option value="CC">CC</option>
+          <option value="CB">CB</option>
+          <option value="CA">CA</option>
+        </select>
+
         <input id="codeInput" type="text" placeholder="كودك الميداني مثال (H-018)" class="input" />
 
         <select id="titleSelect" class="input">
@@ -83,6 +92,9 @@
     const titleNumberInput = document.getElementById('titleNumberInput');
     const sariaSelect = document.getElementById('sariaSelect');
 
+    // اللاعب المعتمد الجديد
+    const playerSelect = document.getElementById('playerSelect');
+
     const leaderChk = document.getElementById('leaderChk');
     const assistantChk = document.getElementById('assistantChk');
     const militaryChk = document.getElementById('militaryChk');
@@ -97,6 +109,7 @@
       let title = titleSelect.options[titleSelect.selectedIndex]?.text || '';
       const titleNum = titleNumberInput.value.trim();
       const sariaVal = sariaSelect.value; // '1'..'4' or ''
+      const playerVal = playerSelect.value.trim(); // CD/CC/CB/CA or ''
 
       if (title && titleNum) {
         title = `${title} ${titleNum}`;
@@ -106,6 +119,7 @@
       if (code) parts.push(code);
       if (title) parts.push(title);
 
+      // سلاسل إضافية (السرية / ش)
       let output = parts.join(' | ');
 
       if (sariaVal) {
@@ -126,6 +140,11 @@
           const sariaSuffix = `( ش )`;
           output = output ? `${output} | ${sariaSuffix}` : sariaSuffix;
         }
+      }
+
+      // إذا اختار المستخدم لاعب معتمد، نضيفه في بداية السلسلة مفصولًا بـ " | "
+      if (playerVal) {
+        output = output ? `${playerVal} | ${output}` : playerVal;
       }
 
       return output || '';
@@ -158,5 +177,3 @@
   </script>
 </body>
 </html>
-
-

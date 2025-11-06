@@ -89,6 +89,7 @@
           <label><input id="leaderChk" type="checkbox" name="services" />قائد سرية (امن المنشات)</label>
           <label><input id="assistantChk" type="checkbox" name="services" /> مساعد قائد السرية (امن المنشات)</label>
           <label><input id="militaryChk" type="checkbox" name="services" /> شرطة عسكرية</label>
+ 	<label><input id="ghafwaChk" type="checkbox" name="services" /> غفوة </label>
         </div>
 
         <div class="actions">
@@ -102,7 +103,7 @@
     </section>
   </main>
 
-  <script>
+   <script>
     // عناصر DOM
     const codeInput = document.getElementById('codeInput');
     const titleSelect = document.getElementById('titleSelect');
@@ -116,14 +117,19 @@
     const assistantChk = document.getElementById('assistantChk');
     const militaryChk = document.getElementById('militaryChk');
 
+    // غفوة checkbox
+    const ghafwaChk = document.getElementById('ghafwaChk');
+
     const showBtn = document.getElementById('showName');
     const copyBtn = document.getElementById('copyBtn');
     const result = document.getElementById('result');
 
-    // لا نحدّث النتيجة تلقائياً — فقط عند الضغطة
+    // لا نحدّث النتيجة تلقائياً إلا إذا كانت مرئية — نحافظ على الشكل (الكشل) الأصلي
     function buildOutputString() {
       const code = (codeInput.value || codeInput.placeholder).trim();
       let title = titleSelect.options[titleSelect.selectedIndex]?.text || '';
+      // لو لم يُختَر مسمى (value == '') نحتفظ بالعناصر كما كانت في الأصل
+      if (!titleSelect.value) title = ''; 
       const titleNum = titleNumberInput.value.trim();
       const sariaVal = sariaSelect.value; // '1'..'4' or ''
       const playerVal = playerSelect.value.trim(); // CD/CC/CB/CA or ''
@@ -164,8 +170,25 @@
         output = output ? `${playerVal} | ${output}` : playerVal;
       }
 
+      // إذا اختار المستخدم غفوة، نضيفها في النهاية مفصولة بـ " | "
+      if (ghafwaChk.checked) {
+        output = output ? `${output} | غفوة` : 'غفوة';
+      }
+
       return output || '';
     }
+
+    // عند الضغط: نولد النتيجة ثم نعرض حقل النتيجة وزر النسخ (السلوك الاصلي)
+    showBtn.addEventListener('click', () => {
+      const output = buildOutputString();
+      if (!output) {
+        alert('لم تدخل بيانات لعرضها.');
+        return;
+      }
+      result.value = output;
+      result.classList.remove('hidden');
+      copyBtn.classList.remove('hidden');
+    });
 
     // عند الضغط: نولد النتيجة ثم نعرض حقل النتيجة وزر النسخ
     showBtn.addEventListener('click', () => {
